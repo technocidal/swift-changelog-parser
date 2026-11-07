@@ -13,7 +13,7 @@ struct Changelog: ParsableCommand {
 
     static let  configuration = CommandConfiguration(
         abstract: "Get items from a Changelog.md file for a specific release or that are unreleased.",
-        version: "1.0.0"
+        version: "1.3.0"
     )
 
     enum Release: ExpressibleByArgument, CustomStringConvertible {
