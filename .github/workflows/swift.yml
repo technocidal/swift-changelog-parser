@@ -2,11 +2,11 @@ name: Swift
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "main" ]
     tags:
       - "**"
   pull_request:
-    branches: [ "master" ]
+    branches: [ "main" ]
 
 permissions:
   contents: write
@@ -16,6 +16,9 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: swift-actions/setup-swift@v3
+        with:
+          swift-version: "6.4.2"
       - name: Run tests
         run: swift test -v
 
@@ -24,6 +27,9 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: swift-actions/setup-swift@v3
+        with:
+          swift-version: "6.4.2"
       - name: Build
         run: swift build -v --disable-sandbox -c release --arch arm64 --arch x86_64
       - name: Release
