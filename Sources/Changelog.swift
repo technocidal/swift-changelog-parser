@@ -71,6 +71,16 @@ struct Changelog: ParsableCommand {
 
     func run() throws {
         let document = try Document(parsing: URL(filePath: path))
+        let section = try Changelog.section(of: document, for: release)
+
+        if section.isEmpty {
+            Logger.changelog.info("Changelog does not contain elements in the '\(release.description.localizedCapitalized, privacy: .public)' section")
+        }
+
+        print(section)
+    }
+
+    static func section(of document: Document, for release: Release) throws -> String {
         let heading = document.children
             .compactMap { $0 as? Heading }
             .filter { $0.level == 2 }
@@ -82,11 +92,9 @@ struct Changelog: ParsableCommand {
 
         let list = document.child(at: heading.indexInParent + 1)
         guard let list, list is UnorderedList else {
-            Logger.changelog.info("Changelog does not contain elements in the '\(release.description.localizedCapitalized, privacy: .public)' section")
-            print("")
-            return
+            return ""
         }
 
-        print(list.format().trimmingCharacters(in: .whitespacesAndNewlines))
+        return list.format().trimmingCharacters(in: .whitespacesAndNewlines)
     }
 }
